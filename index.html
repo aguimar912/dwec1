@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .incorrecto {
+        color: red;
+        border: 1px solid red;
+      }
+
+      .correcto {
+        color: green;
+        border: default;
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+        //No copiar y pegar en los campos contraseña
+        document
+          .querySelector("#password")
+          .addEventListener("copy", function (evt) {
+            evt.preventDefault();
+          });
+        document
+          .querySelector("#password")
+          .addEventListener("paste", function (evt) {
+            evt.preventDefault();
+          });
+        document
+          .querySelector("#password2")
+          .addEventListener("copy", function (evt) {
+            evt.preventDefault();
+          });
+        document
+          .querySelector("#password2")
+          .addEventListener("paste", function (evt) {
+            evt.preventDefault();
+          });
+        document.querySelector("button").addEventListener("click", () => {
+          //Email correcto:
+          let email = document.getElementById("email");
+          if (!email.checkValidity()) {
+            document.querySelector("span").textContent =
+              "Debes introducir un email correcto";
+          }
+          //Contraseñas iguales:
+          pass1 = document.getElementById("password").value;
+          pass2 = document.getElementById("password2").value;
+          if (pass1 != pass2) {
+            //Si la primera contraseña es distinta a la segunda, mostramos un mensaje
+            document.querySelector("span").textContent =
+              "Las contraseñas no coinciden";
+            document.querySelector("span").classList.add("incorrecto");
+          } else {
+            //Si coinciden, seguimos haciendo comprobaciones:
+            document.querySelector("span").classList.remove("incorrecto");
+            document.querySelector("span").textContent = "COincide";
+            const letramay = new RegExp("(?=.*?[A-Z])");
+            const letramin = new RegExp("(?=.*?[a-z])");
+            const digito = new RegExp("(?=.*?[0-9])");
+            const especial = new RegExp("(?=.*?[=#?!@$%^&*-])");
+            const longitud = new RegExp(".{8,}");
+
+            let expresiones = [letramay, letramin, digito, especial, longitud];
+            let valido = true;
+            expresiones.forEach((v, k) => {
+              console.log(v.test(pass1));
+              if (!v.test(pass1)) {
+                valido = false;
+                document
+                  .querySelector(`li:nth-child(${k + 1})`)
+                  .classList.add("incorrecto");
+                document
+                  .querySelector(`li:nth-child(${k + 1})`)
+                  .classList.remove("correcto");
+              } else {
+                document
+                  .querySelector(`li:nth-child(${k + 1})`)
+                  .classList.add("correcto");
+                document
+                  .querySelector(`li:nth-child(${k + 1})`)
+                  .classList.remove("incorrecto");
+              }
+              if (!valido) {
+                document.querySelector("#password").classList.add("incorrecto");
+                document
+                  .querySelector("#password")
+                  .classList.remove("correcto");
+              } else {
+                document
+                  .querySelector("#password")
+                  .classList.remove("incorrecto");
+                document.querySelector("#password").classList.add("correcto");
+              }
+            });
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <form>
+      Email:<input type="email" id="email" /> <br />
+      <!-- Contraseña:
+      <input type="password" name="password" id="password" /><br />
+      Repite contraseña:
+      <input type="password" name="password" id="password2" /> <br /> -->
+
+      <button type="button">Validar</button>
+    </form>
+    <span></span><br />
+    <ul>
+      <li>Mayúscula</li>
+      <li>Minúscula</li>
+      <li>Dígito</li>
+      <li>Especial #?!@$%^&*-</li>
+      <li>8 caracteres o más</li>
+    </ul>
+  </body>
+</html>
