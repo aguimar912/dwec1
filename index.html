@@ -17,7 +17,22 @@
       }
     </style>
     <script>
+      function notificar() {
+        Notification.requestPermission().then(function (permission) {
+          //pedir permiso para modificar. cuando la persona diga si o no
+          if (permission === "granted") {
+            alert(`Has Aceptado las notificaciones`);
+          } else {
+            alert(
+              `Has bloqueado las notificaciones  \n ${String.fromCodePoint(
+                0x1f631
+              )}`
+            ); //String.fromCodePoint(0x1F631) para ver un icono
+          }
+        });
+      }
       document.addEventListener("DOMContentLoaded", function (event) {
+        notificar();
         //No copiar y pegar en los campos contraseña
         document
           .querySelector("#password")
@@ -41,11 +56,20 @@
           });
         document.querySelector("button").addEventListener("click", () => {
           //Email correcto:
+          let ok = true;
+
           let email = document.getElementById("email");
+
           if (!email.checkValidity()) {
             document.querySelector("span").textContent =
-              "Debes introducir un email correcto";
+              email.validationMessage;
+            // "Debes introducir un email correcto";
+
+            ok = false;
+          } else {
+            document.querySelector("span").textContent = "email bien";
           }
+
           //Contraseñas iguales:
           pass1 = document.getElementById("password").value;
           pass2 = document.getElementById("password2").value;
@@ -53,6 +77,7 @@
             //Si la primera contraseña es distinta a la segunda, mostramos un mensaje
             document.querySelector("span").textContent =
               "Las contraseñas no coinciden";
+            ok = false;
             document.querySelector("span").classList.add("incorrecto");
           } else {
             //Si coinciden,   seguimos haciendo comprobaciones:
@@ -66,10 +91,12 @@
 
             let expresiones = [letramay, letramin, digito, especial, longitud];
             let valido = true;
+
             expresiones.forEach((v, k) => {
               console.log(v.test(pass1));
               if (!v.test(pass1)) {
                 valido = false;
+                ok = false;
                 document
                   .querySelector(`li:nth-child(${k + 1})`)
                   .classList.add("incorrecto");
@@ -89,6 +116,7 @@
                 document
                   .querySelector("#password")
                   .classList.remove("correcto");
+                ok = false;
               } else {
                 document
                   .querySelector("#password")
@@ -97,13 +125,20 @@
               }
             });
           }
+          if (ok) document.querySelector("form").submit;
         });
       });
     </script>
   </head>
   <body>
     <form>
-      Email:<input type="email" id="email" /> <br />
+      Email:<input
+        type="email"
+        name="email"
+        id="email"
+        pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}"
+      />
+      <br />
       Contraseña:
       <input type="password" name="password" id="password" /><br />
       Repite contraseña:
