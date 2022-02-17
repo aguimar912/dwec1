@@ -55,7 +55,7 @@
               "Las contraseñas no coinciden";
             document.querySelector("span").classList.add("incorrecto");
           } else {
-            //Si coinciden, seguimos haciendo comprobaciones:
+            //Si coinciden,   seguimos haciendo comprobaciones:
             document.querySelector("span").classList.remove("incorrecto");
             document.querySelector("span").textContent = "COincide";
             const letramay = new RegExp("(?=.*?[A-Z])");
@@ -104,10 +104,10 @@
   <body>
     <form>
       Email:<input type="email" id="email" /> <br />
-      <!-- Contraseña:
+      Contraseña:
       <input type="password" name="password" id="password" /><br />
       Repite contraseña:
-      <input type="password" name="password" id="password2" /> <br /> -->
+      <input type="password" name="password" id="password2" /> <br />
 
       <button type="button">Validar</button>
     </form>
